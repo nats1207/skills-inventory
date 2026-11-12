@@ -52,57 +52,62 @@ The DoR is a quality check before an item is picked up in a sprint. A story is r
 
 ## Repository context and possible solution
 
-In both create and review mode, inspect the repository before drafting the team section. Read applicable repository instructions and use the README to locate the relevant area, then inspect the implementation, configuration, tests, and deployment files needed to understand the requested change. Follow the code when documentation and implementation differ, and state any material discrepancy.
+In both create and review mode, inspect the repository before drafting technical content. Read applicable repository instructions and use the README to locate the relevant area, then inspect the implementation, configuration, tests, and deployment files needed to understand the requested change. Follow the code when documentation and implementation differ, and state any material discrepancy.
 
 For this repository, start with the relevant area rather than scanning everything: `aise-edp/` for Python ingestion, `aise-edp-jvm/` for JVM components, `Synapse/` for orchestration and artifacts, `databases/` and `meta-sqldb/` for database and metadata work, `Deployment_pipeline/` for CI/CD, and `powerbi/` for reporting. Treat these as navigation hints; verify actual paths and behavior for each ticket.
 
-Include a **Possible solution (proposal)** in the team section:
+Include a concise **Possible solution (proposal)**, either within Delivery steps or as an additional section when needed:
 
 - Describe a concrete approach that meets the requested outcome and fits the existing architecture. Prefer established patterns and reusable components found in the repo.
 - Explain why the approach fits, cite the relevant repository-relative file paths (and symbols or line numbers where useful), and identify the components likely to change. Separate observed current behavior from proposed changes.
 - Propose scope, delivery steps, a testing method, and technical acceptance criteria consistent with the approach. Identify existing tests or commands where available; label new tests as proposed. Do not claim that tests were run or that production testing is feasible without evidence.
 - State assumptions, material tradeoffs, and dependencies that still need verification. Distinguish confirmed dependencies from possible ones; do not equate an absence of evidence with no dependencies.
+- In Delivery steps, include relevant repository-backed risks and considerations alongside the action they affect. Explain the observed behaviour and its potential impact briefly; distinguish confirmed behaviour from risks that still need validation. Do not add generic or speculative warnings.
 - If repo access or relevant evidence is missing, explain the limitation and give only a conditional approach with explicit assumptions. Use `[TO DO: …]` for information that cannot be established. Never invent file paths, capabilities, or business facts.
 
 Keep the proposal separate from **Selected solution**. Populate the selected solution only when the user or existing ticket identifies an agreed approach; otherwise mark it `[TO DO: Team to select a solution; see proposal below]`. Preserve an existing agreed solution unless the user asks to change it; explain any evidence-backed concern and present alternatives as proposals. A proposal alone does not satisfy the DoR requirement for a selected solution or close open dependencies.
 
-Keep technical solution details in the team section for business stories. Drafting a solution does not authorize implementing it or changing repository files.
+For business stories, keep Description and Why functional; put technical solution details in the proposal and Delivery steps. Drafting a solution does not authorize implementing it or changing repository files.
 
 ## Story template
 
-Use this structure (Jira-friendly markdown). Write in the language the user writes in, unless they ask otherwise.
+Always include the eight headings below, with these exact names and in this order. Additional headings are allowed only when they provide necessary context. Do not split functional and technical acceptance criteria into separate sections. Write in the language the user writes in, unless they ask otherwise.
+
+Be concise and to the point. Include enough context for someone unfamiliar with the conversation to pick up the story, but prefer a short paragraph or focused bullets over long explanations. Cite only the repository evidence needed to support the approach; avoid a large inventory of findings.
+
+Preserve every point in the user's source text, including questions, constraints, exclusions, collaboration, and documentation requests. Before delivering, check each point against the final story and restore any missing coverage. Related points may be combined if each remains explicit; concision must not remove requirements. Always use bullet points for Scope, distinguishing in-scope and out-of-scope items.
 
 ```
 **Title:** <short, action-oriented, specific>
 **Type:** Business story | Enabler
 
-## Description (WHAT)
+## Description
 Business story: As a <role>, I want <capability>, so that <benefit>.
 Enabler: Purpose, technical requirements, expected end result.
 
-## Context / Background (WHY)
-- For whom:
-- Why now / problem today:
-- Added value:
+## Why
+<Who benefits, the current problem, and the value of addressing it.>
 
-## Functional acceptance criteria
+## Scope
+- In scope: ...
+- Out of scope: ...
+
+## Dependencies
+None confirmed | <confirmed dependencies and unresolved prerequisites, clearly distinguished>
+
+## Delivered artifact
+<Briefly name the concrete output delivered by this story, such as code, a runbook, or an assessment.>
+
+## Acceptance criteria
 - [ ] ...
 
----
-## Team section (complete before refinement)
-**Selected solution:** <agreed approach, or [TO DO: Team to select a solution]>
-**Possible solution (proposal):**
-- Approach and rationale:
-- Repository evidence / affected components:
-- Assumptions and tradeoffs:
-**Scope:** In scope: … / Out of scope: …
-**Steps (HOW):**
+## Delivery steps
+**Selected solution:** <agreed approach, or [TO DO: Team to select a solution; see proposal below]>
+**Possible solution (proposal):** <brief repository-grounded approach, key evidence, and material assumptions>
 1. ...
-**Testing method:**
+
+## Testing method
 1. ...
-**Dependencies:** None | <list — story is not sprint-ready while open>
-**Technical acceptance criteria:**
-- [ ] ...
 
 **Story points:** _assigned by the team during refinement_
 ```
@@ -111,12 +116,13 @@ Enabler: Purpose, technical requirements, expected end result.
 
 1. Determine the type: business story (functional need) or enabler (technical work). Ask if genuinely unclear.
 2. If the WHY is missing (who benefits, what value), ask for it in one short question — it's the part most often skipped and it can't be invented. Otherwise draft straight away.
-3. Fill the requestor section from what the user gave. For a business story keep the description and functional acceptance criteria free of technical details; put any technical ideas the user mentioned in the team section instead.
-4. Fill the team section from the user's input and inspected repository evidence. Include a possible solution and proposed scope, delivery steps, testing method, and technical acceptance criteria using the guidance above. Label proposals and assumptions explicitly; do not present them as agreed decisions. Mark unresolved facts as `[TO DO: …]` with a short hint of what is needed. Never invent dependencies or estimates.
+3. Fill Description and Why from what the user gave. For a business story keep these functional; put technical ideas in the proposal and Delivery steps. Combine functional and technical acceptance criteria in one list.
+4. Fill the remaining required sections from the user's input and inspected repository evidence. Include a concise possible solution using the guidance above. Label proposals and assumptions explicitly; do not present them as agreed decisions. Mark unresolved facts as `[TO DO: …]` with a short hint of what is needed. Never invent dependencies or estimates.
 5. Never fill in story points.
-6. Write acceptance criteria that are objectively checkable: concrete inputs, outputs, values, or observable behaviour. Avoid vague words (fast, easy, user-friendly, correct, robust) unless quantified.
+6. Write one combined list of objectively checkable acceptance criteria: concrete inputs, outputs, values, or observable behaviour. Each criterion must cover one specific element, be clear, and be distinct from every other criterion. Remove overlap and duplication. Avoid vague words (fast, easy, user-friendly, correct, robust) unless quantified. For spikes, define investigation outputs and evidence rather than requiring the production implementation.
 7. If the story looks too big for one sprint or bundles separate goals, say so and propose a split into smaller stories.
-8. End with a one-line status: what's still open before it's ready for refinement.
+8. Check the final story against every point in the user's source text, including earlier requirements retained through revisions. Ensure Scope uses bullets and Delivery steps include relevant repository-backed risks and considerations.
+9. End with a one-line status: what's still open before it's ready for refinement.
 
 ## Review mode
 
@@ -128,10 +134,10 @@ Output in this order:
    - *Not ready* — with the one-sentence main reason
 2. **DoR check** — a table with columns `DoR item | Status | Note`, using ✅ met, ⚠️ partial/weak, ❌ missing. Cover INVEST, the general items, the requestor items, and the team items. Keep notes short and specific (quote the weak phrase where useful).
 3. **Top issues** — max 5, most important first, each with a concrete fix.
-4. **Improved version** — the full story rewritten in the template. Keep the author's intent and facts; improve wording, structure and testability. Add a repository-grounded possible solution and proposed team-section details using the guidance above. Distinguish repo findings, proposals, and agreed decisions. Mark unresolved facts as `[TO DO: …]` rather than inventing them. The verdict and DoR check assess the supplied story using verified evidence; improvements and new proposals do not retroactively make the original story ready.
+4. **Improved version** — the concise story rewritten with all eight required headings and one combined acceptance-criteria list. Keep the author's intent and facts; improve wording, structure and testability. Add a repository-grounded possible solution using the guidance above. Distinguish repo findings, proposals, and agreed decisions. Mark unresolved facts as `[TO DO: …]` rather than inventing them. The verdict and DoR check assess the supplied story using verified evidence; improvements and new proposals do not retroactively make the original story ready.
 
 Things to watch for specifically:
-- Technical details in the description of a business story (move them to the team section)
+- Technical solution details in Description or Why of a business story (move them to the proposal or Delivery steps)
 - Missing or vague WHY / added value
 - Acceptance criteria that can't be objectively tested, or that restate the description
 - Hidden dependencies (other teams, source systems, access rights, data availability, approvals) — an open dependency means not sprint-ready
